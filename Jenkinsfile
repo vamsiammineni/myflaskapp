@@ -9,7 +9,8 @@ pipeline {
         stage('Unit Tests'){
             steps {
                 script {
-                   sh 'python test.py'
+                   sh 'pip3 install -r requirements.txt'
+                   sh 'python3  test.py'
                 }
             }
         }
