@@ -1,5 +1,4 @@
 from flask import Flask
-
 app = Flask(__name__)
 
 
@@ -7,6 +6,11 @@ app = Flask(__name__)
 @app.route('/index')
 def homepage():
     return 'This is our home page'
+
+
+@app.route('/hello')
+def hello():
+    return 'THis is hello page'
 
 
 @app.route('/<name>')
