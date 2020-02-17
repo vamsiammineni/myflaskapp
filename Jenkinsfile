@@ -3,7 +3,6 @@ pipeline {
     environment {
         REGISTRY = "vamsiammineni/myflaskapp"
         REGISTRYCREDS = 'dockerhub'
-        DOCKER_TAG = getDockerTag()
     }
     stages {
         stage('Unit Tests'){
@@ -37,9 +36,4 @@ pipeline {
             }
         }
     }
-}
-
-def getDockerTag(){
-    def tag = sh script: 'git rev-parse HEAD', returnStdout: true
-    return tag
 }
