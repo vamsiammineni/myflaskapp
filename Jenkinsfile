@@ -37,9 +37,10 @@ pipeline {
         }
         stage('Launch application') {
             steps {
-                def container = docker.image('myflaskapp').run('-p 5000:5000')
+                script {
+                    container = docker.image('myflaskapp').run('-p 5000:5000')
+                }
             }
-
         }
     }
 }
