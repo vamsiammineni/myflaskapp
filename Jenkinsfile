@@ -17,7 +17,7 @@ pipeline {
             steps{
                 echo 'Starting to build docker image'
                 script {
-                    dockerImage = docker.build(${REGISTRY}':'${env.BUILD_ID})
+                    dockerImage = docker.build(${REGISTRY} + ':' + ${env.BUILD_ID})
                 }
             }
         }
@@ -38,7 +38,7 @@ pipeline {
         stage('Launch application') {
             steps {
                 script {
-                    container = docker.image('myflaskapp:'${env.BUILD_ID}).run('-p 5000:5000')
+                    container = docker.image('myflaskapp:' + ${env.BUILD_ID}).run('-p 5000:5000')
                 }
             }
         }
