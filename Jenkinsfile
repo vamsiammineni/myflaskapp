@@ -35,5 +35,11 @@ pipeline {
                 sh "docker rmi $REGISTRY:${env.BUILD_ID}"
             }
         }
+        stage('Launch application') {
+            steps {
+                def container = docker.image('myflaskapp').run('-p 5000:5000')
+            }
+
+        }
     }
 }
