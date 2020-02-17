@@ -38,7 +38,7 @@ pipeline {
         stage('Launch application') {
             steps {
                 script {
-                    container = docker.image('myflaskapp:' + "${env.BUILD_ID}").run('-p 5000:5000')
+                    container = docker.image(REGISTRY + ":" + "${env.BUILD_ID}").run('-p 5000:5000')
                 }
             }
         }
