@@ -39,19 +39,27 @@ pipeline {
             steps {
                 script {
                     container = docker.image(REGISTRY + ":" + "${env.BUILD_ID}").run('-p 80:80')
-                    echo container
                 }
             }
         }
         stage('Test the application') {
             steps {
                 script {
-                    def response = sh(script: 'curl localhost:80', returnStdout: true)
-                    if( response == 'This is our home page') {
-                        return True
+                    def response1 = sh(script: 'curl localhost:80', returnStdout: true)
+                    def response2 = sh(script: 'curl localhost:80/hello', returnStdout: true)
+                    if( response1 == 'This is our home page' || response2 == 'THis is hello page') {
+                        return 'Success'
                      } else {
-                        return False
+                        return 'Failure'
                      }
+                }
+            }
+        }
+        stage('Docker Cleanup') {
+            steps {
+                script {
+                    container.stop()
+                    sh 'docker system prune -a'
                 }
             }
         }
