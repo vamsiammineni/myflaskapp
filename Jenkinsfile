@@ -46,7 +46,7 @@ pipeline {
         stage('Test the application') {
             steps {
                 script {
-                    def response = sh(script: sh 'curl localhost:80', returnStdout: true)
+                    def response = sh(script: 'curl localhost:80', returnStdout: true)
                     if( response == 'This is our home page') {
                         return True
                      } else {
