@@ -38,7 +38,7 @@ pipeline {
         stage('Launch application') {
             steps {
                 script {
-                    container = docker.image(REGISTRY + ":" + "${env.BUILD_ID}").run('-p 8081:5000')
+                    container = docker.image(REGISTRY + ":" + "${env.BUILD_ID}").run('-p 80:80')
                 }
             }
         }
