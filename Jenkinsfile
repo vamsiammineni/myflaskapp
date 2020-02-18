@@ -42,5 +42,16 @@ pipeline {
                 }
             }
         }
+        stage('Test the application') {
+            steps {
+                script {
+                    if(sh 'curl localhost:80' == 'This is our home page') {
+                        return True
+                     } else {
+                        return False
+                     }
+                }
+            }
+        }
     }
 }
