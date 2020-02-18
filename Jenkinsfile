@@ -39,13 +39,15 @@ pipeline {
             steps {
                 script {
                     container = docker.image(REGISTRY + ":" + "${env.BUILD_ID}").run('-p 80:80')
+                    echo container
                 }
             }
         }
         stage('Test the application') {
             steps {
                 script {
-                    if(sh 'curl localhost:80' == 'This is our home page') {
+                    def response = sh(script: sh 'curl localhost:80', returnStdout: true)
+                    if( response == 'This is our home page') {
                         return True
                      } else {
                         return False
