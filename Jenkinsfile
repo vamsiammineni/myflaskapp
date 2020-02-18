@@ -59,7 +59,7 @@ pipeline {
             steps {
                 script {
                     container.stop()
-                    sh 'docker system prune -a'
+                    sh 'docker system prune -a -f'
                 }
             }
         }
