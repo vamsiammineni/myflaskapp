@@ -17,7 +17,8 @@ pipeline {
             steps{
                 echo 'Starting to build docker image'
                 script {
-                    dockerImage = docker.build("${REGISTRY}:${env.BUILD_ID}")
+                    dockerImage_current_version = docker.build("${REGISTRY}:${env.BUILD_ID}")
+                    dockerImage_latest_version = docker.build("${REGISTRY}:latest")
                 }
             }
         }
@@ -25,7 +26,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', REGISTRYCREDS){
-                        dockerImage.push()
+                        dockerImage_current_version.push()
+                        dockerImage_latest_version.push()
                     }
                 }
             }
@@ -33,32 +35,20 @@ pipeline {
         stage('Remove Unused docker image') {
             steps{
                 sh "docker rmi $REGISTRY:${env.BUILD_ID}"
+                sh "docker rmi $REGISTRY:latest"
             }
         }
         stage('Launch application') {
             steps {
                 script {
-                    container = docker.image(REGISTRY + ":" + "${env.BUILD_ID}").run('-p 80:80')
-                }
-            }
-        }
-        stage('Test the application') {
-            steps {
-                script {
-                    def response1 = sh(script: 'curl localhost:80', returnStdout: true)
-                    def response2 = sh(script: 'curl localhost:80/hello', returnStdout: true)
-                    if( response1 == 'This is our home page' || response2 == 'THis is hello page') {
-                        return 'Success'
-                     } else {
-                        return 'Failure'
-                     }
+                    sh 'docker-compose up -d'
                 }
             }
         }
         stage('Docker Cleanup') {
             steps {
                 script {
-                    container.stop()
+                    sh 'docker-compose stop'
                     sh 'docker system prune -a -f'
                 }
             }
